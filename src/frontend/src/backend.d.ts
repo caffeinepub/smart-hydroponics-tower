@@ -14,6 +14,14 @@ export interface HydroponicsData {
     systemStatus: SystemStatus;
     startDate: Time;
 }
+export interface SensorReading {
+    tds: bigint;
+    pumpState: boolean;
+    turbidity: number;
+    temperature: bigint;
+    waterClarity: string;
+    timestamp: bigint;
+}
 export interface SystemStatus {
     tds: bigint;
     pumpState: boolean;
@@ -23,6 +31,7 @@ export interface SystemStatus {
 export interface backendInterface {
     getHydroponicsData(): Promise<HydroponicsData>;
     getPlantName(): Promise<string>;
+    getReadingHistory(): Promise<Array<SensorReading>>;
     getStartDate(): Promise<Time>;
     getSystemStatus(): Promise<SystemStatus>;
     getUserName(): Promise<string>;
@@ -33,4 +42,5 @@ export interface backendInterface {
     setTemperature(temperature: bigint): Promise<void>;
     setUserName(userName: string): Promise<void>;
     setWaterClarity(waterClarity: string): Promise<void>;
+    updateSensorReading(tds: bigint, temperature: bigint, turbidity: number, pumpState: boolean, waterClarity: string): Promise<void>;
 }

@@ -21,10 +21,19 @@ export const HydroponicsData = IDL.Record({
   'systemStatus' : SystemStatus,
   'startDate' : Time,
 });
+export const SensorReading = IDL.Record({
+  'tds' : IDL.Nat,
+  'pumpState' : IDL.Bool,
+  'turbidity' : IDL.Float64,
+  'temperature' : IDL.Int,
+  'waterClarity' : IDL.Text,
+  'timestamp' : IDL.Int,
+});
 
 export const idlService = IDL.Service({
   'getHydroponicsData' : IDL.Func([], [HydroponicsData], ['query']),
   'getPlantName' : IDL.Func([], [IDL.Text], ['query']),
+  'getReadingHistory' : IDL.Func([], [IDL.Vec(SensorReading)], ['query']),
   'getStartDate' : IDL.Func([], [Time], ['query']),
   'getSystemStatus' : IDL.Func([], [SystemStatus], ['query']),
   'getUserName' : IDL.Func([], [IDL.Text], ['query']),
@@ -35,6 +44,11 @@ export const idlService = IDL.Service({
   'setTemperature' : IDL.Func([IDL.Int], [], []),
   'setUserName' : IDL.Func([IDL.Text], [], []),
   'setWaterClarity' : IDL.Func([IDL.Text], [], []),
+  'updateSensorReading' : IDL.Func(
+      [IDL.Nat, IDL.Int, IDL.Float64, IDL.Bool, IDL.Text],
+      [],
+      [],
+    ),
 });
 
 export const idlInitArgs = [];
@@ -53,10 +67,19 @@ export const idlFactory = ({ IDL }) => {
     'systemStatus' : SystemStatus,
     'startDate' : Time,
   });
+  const SensorReading = IDL.Record({
+    'tds' : IDL.Nat,
+    'pumpState' : IDL.Bool,
+    'turbidity' : IDL.Float64,
+    'temperature' : IDL.Int,
+    'waterClarity' : IDL.Text,
+    'timestamp' : IDL.Int,
+  });
   
   return IDL.Service({
     'getHydroponicsData' : IDL.Func([], [HydroponicsData], ['query']),
     'getPlantName' : IDL.Func([], [IDL.Text], ['query']),
+    'getReadingHistory' : IDL.Func([], [IDL.Vec(SensorReading)], ['query']),
     'getStartDate' : IDL.Func([], [Time], ['query']),
     'getSystemStatus' : IDL.Func([], [SystemStatus], ['query']),
     'getUserName' : IDL.Func([], [IDL.Text], ['query']),
@@ -67,6 +90,11 @@ export const idlFactory = ({ IDL }) => {
     'setTemperature' : IDL.Func([IDL.Int], [], []),
     'setUserName' : IDL.Func([IDL.Text], [], []),
     'setWaterClarity' : IDL.Func([IDL.Text], [], []),
+    'updateSensorReading' : IDL.Func(
+        [IDL.Nat, IDL.Int, IDL.Float64, IDL.Bool, IDL.Text],
+        [],
+        [],
+      ),
   });
 };
 

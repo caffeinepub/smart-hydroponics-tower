@@ -1,6 +1,13 @@
 import Text "mo:core/Text";
 import Time "mo:core/Time";
+import Float "mo:core/Float";
+import Array "mo:core/Array";
+import List "mo:core/List";
+import Int "mo:core/Int";
+import Iter "mo:core/Iter";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   type SystemStatus = {
     tds : Nat;
@@ -14,6 +21,15 @@ actor {
     plantName : Text;
     startDate : Time.Time;
     systemStatus : SystemStatus;
+  };
+
+  type SensorReading = {
+    tds : Nat;
+    temperature : Int;
+    turbidity : Float;
+    pumpState : Bool;
+    waterClarity : Text;
+    timestamp : Int;
   };
 
   let defaultStatus : SystemStatus = {
@@ -31,6 +47,7 @@ actor {
   };
 
   var data : HydroponicsData = defaultData;
+  var readings : [SensorReading] = [];
 
   public shared ({ caller }) func setUserName(userName : Text) : async () {
     data := {
@@ -115,5 +132,36 @@ actor {
 
   public query ({ caller }) func getHydroponicsData() : async HydroponicsData {
     data;
+  };
+
+  public shared ({ caller }) func updateSensorReading(tds : Nat, temperature : Int, turbidity : Float, pumpState : Bool, waterClarity : Text) : async () {
+    let newReading : SensorReading = {
+      tds;
+      temperature;
+      turbidity;
+      pumpState;
+      waterClarity;
+      timestamp = Time.now();
+    };
+
+    let readingsList = List.fromIter<SensorReading>(readings.values());
+    readingsList.add(newReading);
+    let maxReadings = 50;
+    let newReadingsIter = readingsList.values();
+    readings := newReadingsIter.take(maxReadings).toArray();
+
+    data := {
+      data with
+      systemStatus = {
+        tds;
+        temperature;
+        pumpState;
+        waterClarity;
+      };
+    };
+  };
+
+  public query ({ caller }) func getReadingHistory() : async [SensorReading] {
+    readings;
   };
 };

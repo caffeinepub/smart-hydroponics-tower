@@ -16,6 +16,14 @@ export interface HydroponicsData {
   'systemStatus' : SystemStatus,
   'startDate' : Time,
 }
+export interface SensorReading {
+  'tds' : bigint,
+  'pumpState' : boolean,
+  'turbidity' : number,
+  'temperature' : bigint,
+  'waterClarity' : string,
+  'timestamp' : bigint,
+}
 export interface SystemStatus {
   'tds' : bigint,
   'pumpState' : boolean,
@@ -26,6 +34,7 @@ export type Time = bigint;
 export interface _SERVICE {
   'getHydroponicsData' : ActorMethod<[], HydroponicsData>,
   'getPlantName' : ActorMethod<[], string>,
+  'getReadingHistory' : ActorMethod<[], Array<SensorReading>>,
   'getStartDate' : ActorMethod<[], Time>,
   'getSystemStatus' : ActorMethod<[], SystemStatus>,
   'getUserName' : ActorMethod<[], string>,
@@ -36,6 +45,10 @@ export interface _SERVICE {
   'setTemperature' : ActorMethod<[bigint], undefined>,
   'setUserName' : ActorMethod<[string], undefined>,
   'setWaterClarity' : ActorMethod<[string], undefined>,
+  'updateSensorReading' : ActorMethod<
+    [bigint, bigint, number, boolean, string],
+    undefined
+  >,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

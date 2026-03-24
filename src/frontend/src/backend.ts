@@ -96,6 +96,14 @@ export interface HydroponicsData {
     systemStatus: SystemStatus;
     startDate: Time;
 }
+export interface SensorReading {
+    tds: bigint;
+    pumpState: boolean;
+    turbidity: number;
+    temperature: bigint;
+    waterClarity: string;
+    timestamp: bigint;
+}
 export interface SystemStatus {
     tds: bigint;
     pumpState: boolean;
@@ -105,6 +113,7 @@ export interface SystemStatus {
 export interface backendInterface {
     getHydroponicsData(): Promise<HydroponicsData>;
     getPlantName(): Promise<string>;
+    getReadingHistory(): Promise<Array<SensorReading>>;
     getStartDate(): Promise<Time>;
     getSystemStatus(): Promise<SystemStatus>;
     getUserName(): Promise<string>;
@@ -115,6 +124,7 @@ export interface backendInterface {
     setTemperature(temperature: bigint): Promise<void>;
     setUserName(userName: string): Promise<void>;
     setWaterClarity(waterClarity: string): Promise<void>;
+    updateSensorReading(tds: bigint, temperature: bigint, turbidity: number, pumpState: boolean, waterClarity: string): Promise<void>;
 }
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
@@ -143,6 +153,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getPlantName();
+            return result;
+        }
+    }
+    async getReadingHistory(): Promise<Array<SensorReading>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getReadingHistory();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getReadingHistory();
             return result;
         }
     }
@@ -283,6 +307,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.setWaterClarity(arg0);
+            return result;
+        }
+    }
+    async updateSensorReading(arg0: bigint, arg1: bigint, arg2: number, arg3: boolean, arg4: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateSensorReading(arg0, arg1, arg2, arg3, arg4);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateSensorReading(arg0, arg1, arg2, arg3, arg4);
             return result;
         }
     }

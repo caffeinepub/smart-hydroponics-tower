@@ -9,6 +9,12 @@ interface Props {
 const menuItems: { id: Screen; emoji: string; label: string; desc: string }[] =
   [
     {
+      id: "live-dashboard",
+      emoji: "📡",
+      label: "Live Dashboard",
+      desc: "Real-time sensor data",
+    },
+    {
       id: "choose-plant",
       emoji: "🌱",
       label: "Choose Plant",

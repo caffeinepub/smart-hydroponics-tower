@@ -103,7 +103,20 @@ export function useGetSystemStatus() {
       return actor.getSystemStatus();
     },
     enabled: !!actor && !isFetching,
-    refetchInterval: 5000,
+    refetchInterval: 3000,
+  });
+}
+
+export function useGetReadingHistory() {
+  const { actor, isFetching } = useActor();
+  return useQuery({
+    queryKey: ["readingHistory"],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getReadingHistory();
+    },
+    enabled: !!actor && !isFetching,
+    refetchInterval: 3000,
   });
 }
 

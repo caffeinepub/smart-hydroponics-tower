@@ -6,6 +6,7 @@ import ChoosePlantPage from "./pages/ChoosePlantPage";
 import GrowthTrackerPage from "./pages/GrowthTrackerPage";
 import HarvestTimerPage from "./pages/HarvestTimerPage";
 import HomePage from "./pages/HomePage";
+import LiveDashboardPage from "./pages/LiveDashboardPage";
 import NutrientSettingsPage from "./pages/NutrientSettingsPage";
 import PlantDetailPage from "./pages/PlantDetailPage";
 import PlantGuidePage from "./pages/PlantGuidePage";
@@ -21,7 +22,8 @@ export type Screen =
   | "growth-tracker"
   | "harvest-timer"
   | "nutrient-settings"
-  | "system-status";
+  | "system-status"
+  | "live-dashboard";
 
 const queryClient = new QueryClient();
 
@@ -77,6 +79,9 @@ function HydroApp() {
         )}
         {screen === "system-status" && (
           <SystemStatusPage onBack={() => navigateTo("home")} />
+        )}
+        {screen === "live-dashboard" && (
+          <LiveDashboardPage onBack={() => navigateTo("home")} />
         )}
       </div>
     </div>
